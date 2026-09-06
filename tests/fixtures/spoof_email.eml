@@ -1,0 +1,16 @@
+Return-Path: <attacker@example.net>
+Received: from relay.spam.example.net (relay.spam.example.net [203.0.113.77])
+	by mx1.example.com (Postfix) with ESMTP id ZZZ111
+	for <victim@example.com>; Wed, 14 Feb 2024 11:00:00 +0000 (UTC)
+Received: from mail.legit-bank.com (mail.legit-bank.com [198.51.100.50])
+	by relay.spam.example.net (Postfix) with ESMTP id YYY222
+	for <victim@example.com>; Wed, 14 Feb 2024 10:59:59 +0000 (UTC)
+From: "Security Alert" <security@legit-bank.com>
+To: victim@example.com
+Subject: Urgent: verify your account now
+Date: Wed, 14 Feb 2024 10:59:50 +0000
+Message-ID: <20240214105950.phish@spam.example.net>
+Reply-To: attacker@example.net
+DKIM-Signature: v=1; a=rsa-sha256; d=spam.example.net; s=default; c=relaxed/relaxed;
+
+Verify your account by clicking: http://legit-bank.com.verify.example.net/login

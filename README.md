@@ -1,82 +1,58 @@
 # D7 — Email Header Analyzer
 
-Parses and analyzes email headers for SPF, DKIM, DMARC, and routing.
+RFC 5322 email header parsing, Received-hop trace, offline SPF/DKIM/DMARC checks, and spoofing indicator detection.
 
-## Overview
+## IMPORTANT: Read before use.
 
-This project analyzes email headers to:
-- Parse the full header block
-- Trace the Received chain (server routing)
-- Evaluate SPF sender policy framework
-- Evaluate DKIM signatures
-- Evaluate DMARC policy alignment
-- Extract IPs, hostnames, and timestamps
+This tool is for **authorized educational and blue-team analysis only**. Analyze emails you are permitted to review (your own inbox, authorized incident-response mail). All fixtures/example data are synthetic with fictional addresses using `.example` domains and RFC 5737 documentation IPs.
 
 ## Features
 
-- **Header parsing**: email parser with full RFC policy
-- **Trace route**: reconstructs the server hop chain
-- **SPF**: check Return-Path, domain, authentication results
-- **DKIM**: parse signature fields (d=, s=)
-- **DMARC**: policy and record inspection
-- **Built-in sample**: works without an input file
+- **Full RFC 5322 header parsing** via Python stdlib `email` module
+- **Received-hop chain trace** (oldest first) with protocol, host, IP extraction
+- **SPF analysis**: Return-Path / From domain correlation, Authentication-Results parsing
+- **DKIM analysis**: signature extraction, d=/s= fields, domain verification
+- **DMARC analysis**: policy extraction
+- **Spoofing indicator detection**: envelope-from mismatch, Reply-To mismatch, DKIM domain mismatch, external links, urgency language, missing DKIM
+- **JSON report output**
 
-## Usage
+## Quick Start
 
 ```bash
-python3 email_headers.py            # uses built-in sample
-python3 email_headers.py email.eml  # analyze a saved .eml file
+# Analyze the built-in fixtures (legit + spoof demo)
+python3 cli.py --demo
+
+# Analyze a real .eml file
+python3 cli.py --input email.eml --output reports/report.json
 ```
 
-## Example Output
+## Parsed Elements
 
+- Headers: Subject, From, To, Date, Message-ID, Return-Path, Reply-To
+- Received: from/by/with/for, date, embedded IPs
+- Authentication-Results (SPF/DKIM/DMARC)
+- DKIM-Signature (d=, s=, a=, c=)
+- Body external links
+
+## Testing
+
+```bash
+python3 -m unittest discover -s tests
 ```
-=== D7 - Email Header Analyzer ===
-Subject: Test email header analysis
-From:    Alice <alice@example.com>
-...
--- Trace Route --
-  Hop 1: from smtp.example.com  by mx1.example.net  with ESMTPS
-```
 
-## Legal Disclaimer
+## Live Lab Test Plan
 
-**IMPORTANT: Read before use.**
+1. Run `python3 cli.py --demo` — should exit 0, print two reports, flag the spoof fixture
+2. Run `python3 -m unittest discover -s tests` — all tests pass
+3. Verify `reports/d7_report.json` contains both emails with spoofing indicators
 
-This project is provided for **educational and authorized security testing purposes only**. 
+## Metrics
 
-### Authorization Requirements
-- You MUST have explicit written permission from the network owner before using this tool
-- Unauthorized interception of network communications is illegal under federal and state laws
-- This tool should ONLY be used on networks you own or have written authorization to test
-
-### Legal Framework
-- **Computer Fraud and Abuse Act (CFAA)**: Unauthorized access to computer systems is a federal crime
-- **Wiretap Act (18 U.S.C. § 2511)**: Interception of electronic communications without consent is illegal
-- **State Laws**: Many states have additional computer crime and wiretapping statutes
-- **GDPR/CCPA**: Data collection may be subject to privacy regulations
-
-### Acceptable Use
-- Testing security of your own networks
-- Authorized penetration testing with written scope
-- Academic research in controlled lab environments
-- Security education and training
-
-### Prohibited Use
-- Intercepting communications on networks you do not own
-- Attacking infrastructure without authorization
-- Any activity that violates applicable laws or regulations
-- Commercial use without proper licensing
-
-### No Warranty
-This software is provided "AS IS" without warranty of any kind. The author is not responsible for any misuse or damage caused by this software.
-
-### Responsible Disclosure
-If you discover vulnerabilities using this tool, follow responsible disclosure practices:
-1. Report to the vendor/owner privately
-2. Allow reasonable time for remediation
-3. Do not exploit beyond proof of concept
+- Formats parsed: RFC 5322 email (`.eml`)
+- Spoofing indicator types: 6 (envelope_from_mismatch, reply_to_mismatch, dkim_domain_mismatch, external_links, urgency_language, missing_dkim)
+- Test count: 14
+- Demo exit code: 0
 
 ## License
 
-MIT
+MIT License — see [LICENSE](LICENSE).

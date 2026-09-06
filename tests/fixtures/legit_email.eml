@@ -1,0 +1,25 @@
+Return-Path: <alice@example.com>
+Received: from mx1.example.net (mx1.example.net [192.0.2.10])
+	by mail.local (Postfix) with ESMTP id A1B2C3
+	for <bob@local.test>; Tue, 15 Jan 2024 09:30:12 +0000 (UTC)
+Received: from smtp.example.com (smtp.example.com [198.51.100.7])
+	by mx1.example.net (Postfix) with ESMTPS id X9Y8Z7
+	for <bob@local.test>; Tue, 15 Jan 2024 09:30:11 +0000 (UTC)
+Received: from mail-sender.infrastructure (mail-sender.infrastructure [203.0.113.33])
+	by smtp.example.com with ESMTP id QWERTY
+	for <bob@local.test>; Tue, 15 Jan 2024 09:30:10 +0000 (UTC)
+From: Alice Example <alice@example.com>
+To: Bob Dev <bob@local.test>
+Subject: Quarterly security report
+Date: Tue, 15 Jan 2024 09:30:00 +0000
+Message-ID: <20240115093000.report@example.com>
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=default; c=relaxed/relaxed; h=from:to:subject; bh=abc123;
+Authentication-Results: mx1.example.net; spf=pass smtp.example.com; dkim=pass header.d=example.com
+DMARC-Filter: OpenDMARC Filter v1.4.2 mx1.example.net p=reject rua=mailto:reports@example.com
+
+Hello Bob,
+
+Attached is the quarterly security report as requested.
+
+Regards,
+Alice

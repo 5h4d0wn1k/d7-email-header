@@ -1,4 +1,11 @@
 __pycache__/
 *.pyc
 *.pyo
-.DS_Store
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+reports/
+parsed/
+.pytest_cache/
